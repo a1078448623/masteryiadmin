@@ -4,7 +4,7 @@
   <el-button size="mini" style=" height: 30px" @click="dialogFormVisible=true">新建用户</el-button>
   <el-table
       :data="tableData.filter(data => !search || data.userName.toLowerCase().includes(search.toLowerCase())).slice((currentPage-1)*pageSize,currentPage*pageSize)"
-      style="width: 100% ;font-size: 16px" @selection-change="handleSelectionChange">
+      style="width: 100% ;font-size: 14px" @selection-change="handleSelectionChange">
     <el-table-column
         ref="multipleTable"
         type="selection"
@@ -13,14 +13,27 @@
 
     </el-table-column>
     <el-table-column
-        label="ID"
-        prop="userId"
-        width="80">
+        label="头像"
+        width="100">
+      <template #default="scope">
+
+        <el-upload
+            class="avatar-uploader"
+            :action="getUrl+'/image/upuserload/'+scope.row.userId"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload"
+        >
+          <el-avatar v-if="scope.row.userImgUrl===null||scope.row.userImgUrl==='null'||scope.row.userImgUrl===''" :src="defaultUrl" alt="" style="height: 42px;width: 42px;"></el-avatar>
+
+          <el-avatar v-else :src="scope.row.userImgUrl" alt="" style="height: 42px;width: 42px;"></el-avatar>
+        </el-upload>
+      </template>
     </el-table-column>
     <el-table-column
         label="账号"
         prop="userName"
-        width="250">
+        width="220">
       <template #default="scope">
         <div style="height: 40px;line-height: 40px">
         <i class="el-icon-user"></i>
@@ -32,7 +45,7 @@
     <el-table-column
         label="密码"
         prop="userPwd"
-        width="250">
+        width="220">
       <template #default="scope">
         <i class="el-icon-lock"></i>
         <span style="margin-left: 10px">{{ scope.row.userPwd }}</span>
@@ -42,7 +55,7 @@
     <el-table-column
         label="手机号"
         prop="phoneNum"
-        width="250">
+        width="210">
       <template #default="scope">
         <i class="el-icon-mobile-phone"></i>
 
@@ -52,7 +65,7 @@
     <el-table-column
         label="地址"
         prop="address"
-        width="250">
+        width="210">
       <template #default="scope">
         <i class="el-icon-map-location"></i>
         <span style="margin-left: 10px">{{ scope.row.address }}</span>
@@ -138,6 +151,7 @@
 <script>
 import {get,post} from "@/utils/Network";
 import QS from "qs"
+const {getBaseUrl} = require('@/utils/Network');
 export default {
   name: "User",
   data() {
@@ -147,7 +161,7 @@ export default {
       search:'',
       currentPage: 1, // 当前页码
       total: '', // 总条数
-      pageSize: 7, // 每页的数据条数,
+      pageSize: 6, // 每页的数据条数,
       multipleSelection: [],
       len:0,
       dialogFormVisible:false,
@@ -165,10 +179,31 @@ export default {
         phoneNum:'',
         address:'',
       },
-      formLabelWidth: '120px'
+      formLabelWidth: '120px',
+      defaultUrl:'http://qw7r9ly4i.hb-bkt.clouddn.com/defaultImg.jpg'
+    }
+  },
+  computed:{
+    getUrl(){
+      return getBaseUrl()
     }
   },
   methods: {
+    handleAvatarSuccess(res, file) {
+      post("/user/getalluser","a").then(res=>{
+
+        this.total=res.data.data.length
+        this.tableData=res.data.data
+      })
+    },
+    beforeAvatarUpload(file) {
+      const isLt2M = file.size / 1024 / 1024 < 2;
+
+      if (!isLt2M) {
+        this.$message.error('上传头像图片大小不能超过 2MB!');
+      }
+      return isLt2M;
+    },
     handleEdit(index, row) {
       this.changeUsr.userId=row.userId
       this.changeUsr.userName=row.userName

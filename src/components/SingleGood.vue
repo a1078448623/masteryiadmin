@@ -3,17 +3,18 @@
   <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <img v-if="showDefault" :src="defaultUrl" alt="" style="height: 150px;width: 100%">
-        <img v-else :src="goodUrl" alt="" style="height: 150px;width: 100%">
+
         <el-upload
             class="avatar-uploader"
-            :action="baseUrl+'/image/upload/'+good.goodsId"
+            :action="getUrl+'/image/upload/'+good.goodsId"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
             style="position:relative;"
         >
-          <i class="el-icon-plus avatar-uploader-icon" style="position:absolute;right: 0;font-size: 19px"></i>
+          <img v-if="showDefault" :src="defaultUrl" alt="" style="height: 180px;width: 100%">
+          <img v-else :src="goodUrl" alt="" style="height: 180px;width: 100%">
+<!--          <i class="el-icon-plus avatar-uploader-icon" style="position:absolute;right: 0;font-size: 19px"></i>-->
         </el-upload>
       </div>
     </template>
@@ -39,7 +40,7 @@
 
 import {post} from "@/utils/Network";
 import QS from "qs";
-
+const {getBaseUrl} = require('@/utils/Network');
 export default {
   name: "SingleGood",
   data(){
@@ -50,6 +51,11 @@ export default {
       showDefault:true,
       goodUrl:''
 
+    }
+  },
+  computed:{
+    getUrl(){
+      return getBaseUrl()
     }
   },
   methods:{

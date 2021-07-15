@@ -49,17 +49,17 @@
         label="图片"
         width="250">
       <template #default="scope">
-        <img v-if="scope.row.specImg===null||scope.row.specImg==='null'" :src="defaultUrl" alt="" style="height: 50px;width: 50px;">
-        <img v-else :src="scope.row.specImg" alt="" style="height: 50px;width: 50px;">
+
         <el-upload
             class="avatar-uploader"
-            :action="baseUrl+'/image/upspecload/'+scope.row.id"
+            :action="getUrl+'/image/upspecload/'+scope.row.id"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
-            style="float:right;margin-right: 150px;margin-top: 20px"
+
         >
-          <i class="el-icon-plus avatar-uploader-icon" style="float:right;font-size: 19px"></i>
+          <img v-if="scope.row.specImg===null||scope.row.specImg==='null'" :src="defaultUrl" alt="" style="height: 50px;width: 50px;">
+          <img v-else :src="scope.row.specImg" alt="" style="height: 50px;width: 50px;">
         </el-upload>
       </template>
     </el-table-column>
@@ -156,6 +156,7 @@
 <script>
 import {get,post} from "@/utils/Network";
 import QS from "qs"
+const {getBaseUrl} = require('@/utils/Network');
 export default {
   name: "GoodDetail",
   data(){
@@ -194,7 +195,9 @@ export default {
     }
   },
   computed:{
-
+    getUrl(){
+      return getBaseUrl()
+    }
   },
   methods:{
     handleAvatarSuccess(res, file) {

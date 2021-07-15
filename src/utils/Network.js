@@ -1,6 +1,8 @@
 import axios from "axios";
+
+const baseUrl='http://localhost:8081'
 const instance = axios.create({
-    baseURL:'http://localhost:8081',
+    baseURL:baseUrl,
     timeout:5000
 });
 
@@ -29,4 +31,7 @@ export function get(url, params){
 
 export function post(url, data) {
     return instance.post(url, data);
+}
+export function getBaseUrl(){
+    return baseUrl
 }

@@ -2,8 +2,8 @@
   <div style="overflow: auto">
     <div style="width: 33vw;position:relative;margin-top: 15px">
     <el-card class="box-card" style="width: 15vw;height: 130px">
-      <div style="color: #606266">浏览量</div>
-      <div style="color:#303133;font-size: 28px;margin-top: 10px;width: 100%;text-align: center">{{basicData.visitors}}</div>
+      <div style="color: #606266">注册用户</div>
+      <div style="color:#303133;font-size: 28px;margin-top: 10px;width: 100%;text-align: center">{{basicData.users}}</div>
     </el-card>
     <el-card class="box-card" style="width: 15vw;position: absolute;top: 0;right: 10px;height: 130px">
       <div style="color: #606266">成交金额</div>
@@ -35,7 +35,8 @@
         <div style="color:#303133;font-size: 18px;text-align: left;margin-bottom: 15px" ><b>商品销量TOP10</b></div>
         <el-carousel trigger="click" height="320px" ref="carous" v-if="show_img" indicator-position="none">
           <el-carousel-item v-for="(item,index) in topGood" :key="item" >
-            <img src="../assets/huawei.jpg" alt="" style="height: 150px;width: 70%">
+            <img v-if="item.goodsCoverUrl==='null'||item.goodsCoverUrl===null" src="../assets/huawei.jpg" alt="" style="height: 150px;width: 70%">
+            <img v-else :src="item.goodsCoverUrl" alt="" style="height: 150px;width: 70%">
             <div style="margin-top: 10px"><b>{{ item.goodsName }}</b></div>
             <div style="font-size: 20px;margin-top: 15px;text-align: right">
               总销量:{{item.sellNum}}

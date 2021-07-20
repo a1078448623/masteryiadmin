@@ -11,7 +11,7 @@
       <el-submenu index="2" style="float:right;height: 9vh">
         <template #title >
           <i class="el-icon-user-solid" style="line-height: 9vh"></i></template>
-        <el-menu-item index="2-1">退出登录</el-menu-item>
+        <el-menu-item index="2-1" @click="logoff">退出登录</el-menu-item>
       </el-submenu>
       <el-menu-item index="3" style="float: right;height: 9vh" @click="flush"><i class="el-icon-refresh-left" style="line-height: 9vh"></i></el-menu-item>
     </el-menu>
@@ -96,6 +96,8 @@
   </div>
 </template>
 <script>
+import {post} from "@/utils/Network";
+
 export default {
   name:'MainPage',
   data() {
@@ -107,6 +109,12 @@ export default {
     };
   },
   methods: {
+    logoff(){
+      post("/login/logoff").then(res=>{
+        window.localStorage.setItem('token',"")
+        this.$router.push({path:'/'})
+      })
+    },
     flush(){
       window.location.reload()
     },

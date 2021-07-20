@@ -16,7 +16,6 @@
   </el-form>
     <div style="width: 34%;text-align: center;margin-left: 33%;margin-top: 10%">
       <el-button type="primary" style="width: 100%" round @click="login">立即登录</el-button>
-      <div style="margin-top: 10%"><el-link type="primary" :underline="false" href="javascript:void(0)" @click="visitor">游客模式</el-link></div>
     </div>
 
   </div>
@@ -25,6 +24,8 @@
 </template>
 
 <script>
+import {post} from "@/utils/Network";
+import QS from "qs"
 export default {
   name: "Login",
   data(){
@@ -35,7 +36,26 @@ export default {
   },
   methods:{
     login(){
-      this.$router.push("/main/home")
+      post("/login/comfirm",QS.stringify({username:this.username,password:this.password})).then(res=>{
+        if(res.data.token===''){
+          this.$message({
+            type:'error',
+            message:'登陆失败!'
+          })
+        }
+        else {
+          window.localStorage.setItem("token",res.data.token)
+          this.$message({
+            type:'success',
+            message:'登陆成功!'
+          })
+          setTimeout(()=>{
+            this.$router.push("/main/home")
+          },800)
+
+        }
+      })
+
     },
     visitor(){
       this.$router.push("/main/home")

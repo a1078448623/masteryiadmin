@@ -18,7 +18,7 @@
         </el-upload>
       </div>
     </template>
-    <div class=" item " style="font-size: 22px">{{ good.goodsName }}</div>
+    <div class=" item " style="font-size: 22px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden">{{ good.goodsName }}</div>
     <div  class="text item" style="font-size:20px;float: right;margin-right: 15px"><span class="iconfont icon-newbimoney"></span>
       {{good.lowPrice}}
     </div>

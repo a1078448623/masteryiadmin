@@ -103,6 +103,12 @@ export default {
       console.log(this.secPrice)
       console.log(this.secStock)
 
+      post("/seckill/addSkGoods",QS.stringify({prodId:this.specsId,stock:this.secStock,price:this.secPrice,bDate:this.valueTime[0]/1000,eDate:this.valueTime[1]/1000},{indices:false})).then(res=>{
+        this.$message({
+          type:'success',
+          message:'发布活动成功!'
+        })
+      })
       // post("/seckill/testdate",QS.stringify({
       //    begin:this.valueTime[0],end:this.valueTime[1],
       //    goodsId:this.specsId,price:this.secPrice,
